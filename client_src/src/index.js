@@ -6,6 +6,11 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 import { createLogger } from 'redux-logger';
+
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import purple from 'material-ui/colors/purple';
+import green from 'material-ui/colors/green';
+
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -36,6 +41,16 @@ const Home = () => (
   </div>
 )
 
+
+const requireAuth = (nextState, replace) => {
+  const state = store.getState();
+  const { auth } = state.auth;
+  if (auth.id) {
+
+  }
+  replace('signin');
+};
+
 const routes =
 <BrowserRouter>
   <div>
@@ -44,5 +59,19 @@ const routes =
   </div>
 </BrowserRouter>
 
-ReactDOM.render(<Provider store={store}>{routes}</Provider>, document.getElementById('root'));
+const theme = createMuiTheme({
+  palette: {
+    primary: purple,
+    secondary: green,
+  },
+  status: {
+    danger: 'orange',
+  },
+});
+
+ReactDOM.render(<Provider store={store}>
+  <MuiThemeProvider theme={theme}>
+    {routes}
+  </MuiThemeProvider>
+</Provider>, document.getElementById('root'));
 registerServiceWorker();
