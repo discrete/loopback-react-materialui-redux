@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -35,13 +35,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 const store = createStore(reducer, {}, middleware);
 
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-)
-
-
 const requireAuth = (nextState, replace) => {
   const state = store.getState();
   const { auth } = state.auth;
@@ -50,14 +43,6 @@ const requireAuth = (nextState, replace) => {
   }
   replace('signin');
 };
-
-const routes =
-<BrowserRouter>
-  <div>
-    <Route exact path="/" component={App} />
-    <Route exact path="/home" component={Home} />
-  </div>
-</BrowserRouter>
 
 const theme = createMuiTheme({
   palette: {
@@ -71,7 +56,9 @@ const theme = createMuiTheme({
 
 ReactDOM.render(<Provider store={store}>
   <MuiThemeProvider theme={theme}>
-    {routes}
+    <Router>
+      <App />
+    </Router>
   </MuiThemeProvider>
 </Provider>, document.getElementById('root'));
 registerServiceWorker();
