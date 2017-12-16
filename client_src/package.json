@@ -2,7 +2,14 @@
   "name": "client_src",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001/",
+  "proxy": {
+    "api" : {
+      "target": "http://localhost:3001"
+    },
+    "auth" : {
+      "target": "http://localhost:3001"
+    }
+  },
   "dependencies": {
     "material-ui": "^1.0.0-beta.23",
     "material-ui-icons": "^1.0.0-beta.17",
