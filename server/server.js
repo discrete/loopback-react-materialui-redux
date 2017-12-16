@@ -5,6 +5,7 @@ var boot = require('loopback-boot');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 var app = module.exports = loopback();
 
@@ -30,6 +31,18 @@ app.middleware('session', session({
   resave: true,
 }));
 
+app.get('/auth/account', ensureLoggedIn('/login'), function(req, res, next) {
+  res.type('text/html');
+  res.send('<script>window.opener.authenticateCallback(' +
+    JSON.stringify(req.user.profiles[0]) + ');window.close();</script>');
+});
+
+app.get('/auth/logout', function(req, res, next) {
+  req.logout();
+  res.type('text/html');
+  res.send('<script>window.opener.authenticateCallback("logout");window.close();</script>');
+});
+
 // Initialize passport
 passportConfigurator.init();
 
@@ -37,7 +50,7 @@ passportConfigurator.init();
 passportConfigurator.setupModels({
   userModel: app.models.user,
   userIdentityModel: app.models.userIdentity,
-  userCredentialModel: app.models.userCredential
+  userCredentialModel: app.models.userCredential,
 });
 // Configure passport strategies for third party auth providers
 for (var s in config) {

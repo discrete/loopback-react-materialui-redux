@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 import { createLogger } from 'redux-logger';
+import { CookiesProvider } from 'react-cookie';
 
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import purple from 'material-ui/colors/purple';
@@ -55,10 +56,12 @@ const theme = createMuiTheme({
 });
 
 ReactDOM.render(<Provider store={store}>
-  <MuiThemeProvider theme={theme}>
-    <Router>
-      <App />
-    </Router>
-  </MuiThemeProvider>
-</Provider>, document.getElementById('root'));
+    <MuiThemeProvider theme={theme}>
+      <Router>
+        <CookiesProvider>
+        <App />
+        </CookiesProvider>
+      </Router>
+    </MuiThemeProvider>
+  </Provider>, document.getElementById('root'));
 registerServiceWorker();

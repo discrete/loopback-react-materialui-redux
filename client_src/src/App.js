@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { instanceOf } from 'prop-types';
 import { withRouter } from 'react-router';
 import { Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { withCookies, Cookies } from 'react-cookie';
+
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
@@ -81,7 +83,24 @@ class App extends Component {
   handleSignin = (event) => {
     console.log(this.props);
     this.props.history.push('signin');
+  }
 
+  handleSignOut = (event) => {
+    console.log("signout");
+    const { cookies, history } = this.props;
+    window.authenticateCallback = function(token) {
+      console.log(token);
+      let accessToken = token;
+      cookies.set('access_token', '', { path: '/' });
+      history.replace('/');
+      // location.reload();
+      // $('#accessToken').val(accessToken);
+    };
+    window.open('/auth/logout');
+  }
+
+  handleTitleClick = (event) => {
+    this.props.history.push('/');
   }
 
   handleDrawerToggle = () => {
@@ -89,7 +108,7 @@ class App extends Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, cookies } = this.props;
 
     const drawer = (
       <div>
@@ -115,9 +134,10 @@ class App extends Component {
               <MenuIcon />
             </IconButton>
             <Typography type="title" color="inherit" className={classes.flex} noWrap>
-            <Link to="/">Title</Link>
+            <span onClick={this.handleTitleClick}>Title{cookies.get('access_token')}</span>
             </Typography>
-            <Button color="contrast" onClick={this.handleSignin}>Login</Button>
+            {cookies.get('access_token') ? <Button color="contrast" onClick={this.handleSignOut}>LogOut</Button>: <Button color="contrast" onClick={this.handleSignin}>Login</Button>}
+
           </Toolbar>
         </AppBar>
         <Hidden mdUp>
@@ -163,6 +183,7 @@ class App extends Component {
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,
+  cookies: instanceOf(Cookies).isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -171,6 +192,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles)(App)));
+export default withCookies(withRouter(connect(mapStateToProps)(withStyles(styles)(App))));
 
 // export default App;
