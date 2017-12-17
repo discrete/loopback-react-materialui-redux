@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {IntlProvider, FormattedMessage} from 'react-intl';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
@@ -7,6 +8,7 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 import { createLogger } from 'redux-logger';
 import { CookiesProvider } from 'react-cookie';
+import { initialize } from 'react-localize-redux';
 
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import purple from 'material-ui/colors/purple';
@@ -36,6 +38,16 @@ if (process.env.NODE_ENV !== 'production') {
 
 const store = createStore(reducer, {}, middleware);
 
+const languages = [
+  { name: 'Korean', code: 'ko' },
+  { name: 'English', code: 'en' },
+  { name: 'Japanese', code: 'jp' },
+  { name: 'Chinese', code: 'zh' },
+  { name: 'French', code: 'fr' },
+  { name: 'Spanish', code: 'es' }
+];
+store.dispatch(initialize(languages, {defaultLanguage: 'ko'}));
+
 const requireAuth = (nextState, replace) => {
   const state = store.getState();
   const { auth } = state.auth;
@@ -56,6 +68,7 @@ const theme = createMuiTheme({
 });
 
 ReactDOM.render(<Provider store={store}>
+  <IntlProvider locale={navigator.language || "ko"}>
     <MuiThemeProvider theme={theme}>
       <Router>
         <CookiesProvider>
@@ -63,5 +76,6 @@ ReactDOM.render(<Provider store={store}>
         </CookiesProvider>
       </Router>
     </MuiThemeProvider>
+    </IntlProvider>
   </Provider>, document.getElementById('root'));
 registerServiceWorker();

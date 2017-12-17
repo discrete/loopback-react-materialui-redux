@@ -1,5 +1,8 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import compose from 'recompose/compose';
+import { connect } from 'react-redux';
+import { getTranslate, getActiveLanguage, addTranslation } from 'react-localize-redux';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 
@@ -12,9 +15,34 @@ const styles = theme => ({
   },
 });
 
+const messages = {
+  "SignIn": {
+    "facebook-signin": [
+      "Facebook으로 Log In",
+      "Log in with Facebook",
+      "JP-Log in with Facebook",
+      "ZH-Log in with Facebook",
+      "FR-Log in with Facebook",
+      "ES-Log in with Facebook"
+    ],
+    "singup": [
+      "가입하기",
+      "Sign Up",
+      "JP-Sign Up",
+      "ZH-Sign Up",
+      "FR-Sign Up",
+      "ES-Sign Up"
+    ]
+  }
+};
+
 export class SignIn extends Component {
   static propTypes = {
 
+  }
+
+  componentDidMount = () => {
+    this.props.dispatch(addTranslation(messages));
   }
 
   handleFacebookClick = (event) => {
@@ -29,14 +57,23 @@ export class SignIn extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, translate, currentLanguage } = this.props;
     return (
       <div>
-        <Button raised className={classes.button} onClick={this.handleFacebookClick}>facebook login
+        <Button raised className={classes.button} onClick={this.handleFacebookClick}>{ translate('SignIn.facebook-signin')}
+        </Button>
+        <Button raised className={classes.button} onClick={() => this.props.history.push('/signup')}>{ translate('SignIn.singup')}
         </Button>
       </div>
     )
   }
 }
 
-export default withStyles(styles)(SignIn);
+const mapStateToProps = state => ({
+  translate: getTranslate(state.locale),
+  currentLanguage: getActiveLanguage(state.locale).code
+});
+
+
+
+export default compose(withStyles(styles), connect(mapStateToProps, null))(SignIn);

@@ -4,6 +4,8 @@ import { withRouter } from 'react-router';
 import { Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withCookies, Cookies } from 'react-cookie';
+import compose from 'recompose/compose';
+import { getTranslate, addTranslation } from 'react-localize-redux';
 
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
@@ -72,6 +74,59 @@ const styles = theme => ({
   },
 });
 
+const messages = {
+  "App": {
+    "title": [
+      "제목",
+      "Title",
+      "JP-Title",
+      "ZH-Title",
+      "FR-Title",
+      "ES-Title"
+    ],
+    "login": [
+      "로그인",
+      "Log in",
+      "JP-Log in",
+      "ZH-Log in",
+      "FR-Log in",
+      "ES-Log in"
+    ],
+    "logout": [
+      "로그아웃",
+      "Log out",
+      "JP-Log out",
+      "ZH-Log out",
+      "FR-Log out",
+      "ES-Log out"
+    ],
+    "menu1": [
+      "메뉴 1",
+      "Menu 1",
+      "JP-Menu 1",
+      "ZH-Menu 1",
+      "FR-Menu 1",
+      "ES-Menu 1"
+    ],
+    "menu2": [
+      "메뉴 2",
+      "Menu 2",
+      "JP-Menu 2",
+      "ZH-Menu 2",
+      "FR-Menu 2",
+      "ES-Menu 2"
+    ],
+    "singup": [
+      "가입하기",
+      "Sign Up",
+      "JP-Sign Up",
+      "ZH-Sign Up",
+      "FR-Sign Up",
+      "ES-Sign Up"
+    ]
+  }
+};
+
 class App extends Component {
   // constructor(props) {
   //   super(props);
@@ -79,6 +134,10 @@ class App extends Component {
   state = {
     mobileOpen: false,
   };
+
+  componentDidMount = () => {
+    this.props.dispatch(addTranslation(messages));
+  }
 
   handleSignin = (event) => {
     console.log(this.props);
@@ -108,15 +167,15 @@ class App extends Component {
   };
 
   render() {
-    const { classes, theme, cookies } = this.props;
+    const { classes, theme, cookies, translate } = this.props;
 
     const drawer = (
       <div>
         <div className={classes.drawerHeader} />
         <Divider />
-        <List>menu1</List>
+        <List>{translate('App.menu1')}</List>
         <Divider />
-        <List>menu2</List>
+        <List>{translate('App.menu2')}</List>
       </div>
     );
 
@@ -134,9 +193,9 @@ class App extends Component {
               <MenuIcon />
             </IconButton>
             <Typography type="title" color="inherit" className={classes.flex} noWrap>
-            <span onClick={this.handleTitleClick}>Title{cookies.get('access_token')}</span>
+            <span onClick={this.handleTitleClick}>{translate('App.title')}{cookies.get('access_token')}</span>
             </Typography>
-            {cookies.get('access_token') ? <Button color="contrast" onClick={this.handleSignOut}>LogOut</Button>: <Button color="contrast" onClick={this.handleSignin}>Login</Button>}
+            {cookies.get('access_token') ? <Button color="contrast" onClick={this.handleSignOut}>{translate('App.logout')}</Button>: <Button color="contrast" onClick={this.handleSignin}>{translate('App.login')}</Button>}
 
           </Toolbar>
         </AppBar>
@@ -189,9 +248,11 @@ App.propTypes = {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
+    translate: getTranslate(state.locale),
   };
 };
 
-export default withCookies(withRouter(connect(mapStateToProps)(withStyles(styles)(App))));
+// export default withCookies(withRouter(connect(mapStateToProps)(withStyles(styles)(App))));
+export default compose(withCookies, withRouter, withStyles(styles), connect(mapStateToProps))(App);
 
 // export default App;
