@@ -3,7 +3,7 @@
     "host": "localhost",
     "port": 27017,
     "url": "",
-    "database": "ninesqs",
+    "database": "loopback",
     "password": "tiger",
     "name": "mongoDs",
     "user": "scott",
