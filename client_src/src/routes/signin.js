@@ -6,6 +6,9 @@ import { getTranslate, getActiveLanguage, addTranslation } from 'react-localize-
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 
+import LocalLoginForm from '../components/LocalLoginForm';
+import { requestLocalAuth } from '../redux/modules/auth';
+
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -56,6 +59,11 @@ export class SignIn extends Component {
     window.open('/auth/facebook');
   }
 
+  submit = values => {
+    console.log(values);
+    this.props.dispatch(requestLocalAuth(values));
+  }
+
   render() {
     const { classes, translate, currentLanguage } = this.props;
     return (
@@ -64,6 +72,7 @@ export class SignIn extends Component {
         </Button>
         <Button raised className={classes.button} onClick={() => this.props.history.push('/signup')}>{ translate('SignIn.singup')}
         </Button>
+        <LocalLoginForm onSubmit={this.submit} />
       </div>
     )
   }
