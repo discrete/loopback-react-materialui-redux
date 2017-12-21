@@ -20,6 +20,8 @@ REST API 서버용 terminal 하나와 frontend 개발을 위한 static contents 
 ```
 $ git clone git@github.com:discrete/loopback-react-materialui-redux.git project_dir
 $ cd project_dir
+$ cp providers.json.template providers.json
+#### THIS IS COMMENT LINE. Change the configuration as you setup in facebook / google
 $ yarn install
 $ docker-compose up -d
 $ yarn start
