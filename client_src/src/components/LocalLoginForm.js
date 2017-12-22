@@ -22,6 +22,7 @@ import MailOutline from 'material-ui-icons/MailOutline';
 
 import NinesqTextField from './NinesqTextField';
 import NinesqEmailField from './NinesqEmailField';
+import NinesqPasswordField from './NinesqPasswordField';
 
 const styles = theme => ({
   flash_on: {
@@ -91,9 +92,15 @@ export class LocalLoginForm extends Component {
     showPassword: true
   }
 
-  componentDidMount = () => {
+  constructor(props) {
+    super(props);
+
     this.props.dispatch(addTranslation(messages));
   }
+
+  // componentWillMount = () => {
+  //   this.props.dispatch(addTranslation(messages));
+  // }
 
   render() {
     const { handleSubmit, pristine, reset, submitting, translate, auth, classes } = this.props;
@@ -121,9 +128,17 @@ export class LocalLoginForm extends Component {
           />
         </div>
         <div>
-          <Field name="myField" component={NinesqEmailField} label="label" />
+          <Field name="myField"
+            component={NinesqEmailField}
+            label={translate('LocalLoginForm.email_placeholder')}
+          />
         </div>
-
+        <div>
+          <Field name="myField"
+            component={NinesqPasswordField}
+            label={translate('LocalLoginForm.password_placeholder')}
+          />
+        </div>
         <div className={auth.error ? classes.flash_on: classes.flash_off}>{`error: ${auth.error}`}</div>
 
         <div><button type="submit">{translate('LocalLoginForm.submit_label')}</button></div>
@@ -132,11 +147,11 @@ export class LocalLoginForm extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, props) => ({
   auth: state.auth.auth,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code
-})
+});
 
 const mapDispatchToProps = {
 

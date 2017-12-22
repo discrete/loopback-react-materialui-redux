@@ -18,20 +18,21 @@ class emailInputAdapter extends PureComponent {
   }
 
   render() {
-    const { input: { name, onChange }, label } = this.props
+    const { input: { onChange, onFocus, onBlur }, label, ...props} = this.props;
+
+    console.log(this.props);
+    console.log(props);
+
     return (
       <div>
         <InputLabel htmlFor="inputfield">{label}</InputLabel>
         <Input
           id="inputfield"
           type="email"
-          value={this.state.value}
-          name={name}
-          endAdornment={
-            <InputAdornment position="end">
-              <MailOutline />
-            </InputAdornment>
-          }
+          onChange={event => {onChange(event.target.value)}}
+          onClick={event => {onFocus(event.target.value)}}
+          onBlur={event => {onBlur(event.target.value)}}
+          {...props}
         />
       </div>
     )
@@ -61,16 +62,21 @@ class emailInputAdapter extends PureComponent {
 // }
 
 const NinesqEmailField = (props) => {
-  const { input, meta, label } = props;
+  const { input, meta, label, fullWidth } = props;
 
   console.log(props);
 
   return (
-    <FormControl>
+    <FormControl fullWidth={fullWidth}>
       <Field
         name={input.name}
         {...props}
         component={emailInputAdapter}
+        endAdornment={
+          <InputAdornment position="end">
+            <MailOutline />
+          </InputAdornment>
+        }
       />
     </FormControl>
   );
