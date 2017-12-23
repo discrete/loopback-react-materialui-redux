@@ -1,29 +1,16 @@
 import React from "react";
-import Input from "material-ui/Input";
+import Input,  { InputLabel, InputAdornment } from "material-ui/Input";
 import { Field } from 'redux-form';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 
-const InputAdapter = props => <Input
-  {...props}
-  value={props.input.value}
-  onChange={props.input.onChange}
-/>;
-
-const NinesqInputField = (props) => {
-  const { input, meta, label, fullWidth } = props;
-
-  console.log(props);
-
-  return (
-    <FormControl fullWidth={fullWidth}>
-      <Field
-        name={input.name}
-        {...props}
-        component={InputAdapter}
-      />
-    </FormControl>
-  );
-}
+const NinesqInputField = props => <FormControl fullWidth={props.fullWidth}>
+  <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
+    <Input
+      {...props}
+      value={props.input.value}
+      onChange={props.input.onChange}
+    />
+</FormControl>
 
 NinesqInputField.propTypes = {
   // classes: PropTypes.object.isRequired,
