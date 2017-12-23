@@ -134,7 +134,7 @@ export class LocalLoginForm extends Component {
           />
         </div>
         <div>
-          <Field name="myField"
+          <Field name="mypassword"
             component={NinesqPasswordField}
             label={translate('LocalLoginForm.password_placeholder')}
           />

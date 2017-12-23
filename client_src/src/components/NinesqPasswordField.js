@@ -12,7 +12,7 @@ export class NinesqPasswordField extends Component {
 
   }
   state = {
-    showPassword: ''
+    showPassword: false
   }
 
   handleMouseDownPassword = event => {
@@ -24,11 +24,12 @@ export class NinesqPasswordField extends Component {
   };
 
   render() {
-    // const { input, ...props} = this.props;
+    const { input: { type }, ...props} = this.props;
+    const { showPassword } = this.state;
     return (
       <div>
         <NinesqInputField
-          // name={input.name}
+          type={showPassword? 'text': 'password'}
           {...this.props}
           endAdornment={
             <InputAdornment position="end">
@@ -46,4 +47,4 @@ export class NinesqPasswordField extends Component {
   }
 }
 
-export default NinesqPasswordField
+export default NinesqPasswordField;
