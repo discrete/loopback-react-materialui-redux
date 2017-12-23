@@ -25,7 +25,7 @@ export class NinesqEmailField extends Component {
           {...this.props}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton>
+              <IconButton disabled disableRipple>
                 <MailOutline />
               </IconButton>
             </InputAdornment>

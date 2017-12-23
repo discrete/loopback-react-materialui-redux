@@ -7,6 +7,8 @@ import { InputAdornment } from 'material-ui/Input';
 
 import NinesqInputField from './NinesqInputField';
 
+let EventListenerMode = {capture: true};
+
 export class NinesqPasswordField extends Component {
   static propTypes = {
 
@@ -15,16 +17,54 @@ export class NinesqPasswordField extends Component {
     showPassword: false
   }
 
+  preventGlobalMouseEvents = () => {
+    document.body.style['pointer-events'] = 'none';
+  }
+
+  restoreGlobalMouseEvents = () => {
+    document.body.style['pointer-events'] = 'auto';
+  }
+
+  mousemoveListener = (e) => {
+    console.log('mousemove');
+    e.stopPropagation ();
+    // do whatever is needed while the user is moving the cursor around
+  }
+
+  mouseupListener = (e) => {
+    console.log('mouseup');
+    this.restoreGlobalMouseEvents ();
+    document.removeEventListener ('mouseup',   this.mouseupListener,   EventListenerMode);
+    document.removeEventListener ('mousemove', this.mousemoveListener, EventListenerMode);
+    e.stopPropagation ();
+    this.setState({ showPassword: !this.state.showPassword });
+  }
+
+  captureMouseEvents = (e) => {
+    console.log('capture mouse');
+    this.preventGlobalMouseEvents ();
+    document.addEventListener ('mouseup',   this.mouseupListener,   EventListenerMode);
+    document.addEventListener ('mousemove', this.mousemoveListener, EventListenerMode);
+    e.preventDefault ();
+    e.stopPropagation ();
+  }
+
   handleMouseDownPassword = event => {
+    this.captureMouseEvents(event);
     event.preventDefault();
   };
 
-  handleClickShowPasssword = () => {
+  handleShowPasssword = (event) => {
+    this.setState({ showPassword: !this.state.showPassword });
+    this.captureMouseEvents(event);
+  };
+
+  handleHidePasssword = () => {
     this.setState({ showPassword: !this.state.showPassword });
   };
 
   render() {
-    const { input: { type }, ...props} = this.props;
+    const { input: { type, value }, ...props} = this.props;
     const { showPassword } = this.state;
     return (
       <div>
@@ -35,7 +75,9 @@ export class NinesqPasswordField extends Component {
             <InputAdornment position="end">
               <IconButton
                 onClick={this.handleClickShowPasssword}
-                onMouseDown={this.handleMouseDownPassword}
+                onMouseDown={this.handleShowPasssword}
+                disableRipple
+                disabled={ value ? false: true}
               >
                 {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
