@@ -1,7 +1,6 @@
 import React from "react";
-import Input,  { InputLabel, InputAdornment } from "material-ui/Input";
-import { Field } from 'redux-form';
-import { FormControl, FormHelperText } from 'material-ui/Form';
+import Input,  { InputLabel } from "material-ui/Input";
+import { FormControl } from 'material-ui/Form';
 
 const NinesqInputField = props => <FormControl fullWidth={props.fullWidth}>
   <InputLabel htmlFor={props.id}>{props.label}</InputLabel>

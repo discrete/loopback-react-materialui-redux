@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import IconButton from 'material-ui/IconButton';
 import Visibility from 'material-ui-icons/Visibility';
 import VisibilityOff from 'material-ui-icons/VisibilityOff';
@@ -64,7 +63,7 @@ export class NinesqPasswordField extends Component {
   };
 
   render() {
-    const { input: { type, value }, ...props} = this.props;
+    const { input: { value }, ...props} = this.props;
     const { showPassword } = this.state;
     return (
       <div>
