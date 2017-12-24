@@ -1,6 +1,6 @@
 import React from "react";
 import Input,  { InputLabel } from "material-ui/Input";
-import { FormControl } from 'material-ui/Form';
+import { FormControl, FormHelperText } from 'material-ui/Form';
 
 const NinesqInputField = props => <FormControl fullWidth={props.fullWidth}>
   <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
@@ -9,6 +9,7 @@ const NinesqInputField = props => <FormControl fullWidth={props.fullWidth}>
       value={props.input.value}
       onChange={props.input.onChange}
     />
+    {props.meta.error ? <FormHelperText>{props.meta.error}</FormHelperText> : ""}
 </FormControl>
 
 NinesqInputField.propTypes = {
