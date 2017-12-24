@@ -108,36 +108,18 @@ export class LocalLoginForm extends Component {
     return (
       <form onSubmit={handleSubmit}>
         <div className={classes.fieldOutline}>
-          <Field
-            name="email"
-            type="email"
-            label={translate('LocalLoginForm.email_placeholder')}
-            fullWidth
-            component={TextField}
-            placeholder={translate('LocalLoginForm.email_placeholder')}
-          />
-        </div>
-        <div className={classes.fieldOutline}>
-          <Field
-            name="password"
-            type="password"
-            fullWidth
-            component={TextField}
-            placeholder={translate('LocalLoginForm.password_placeholder')}
-            label={translate('LocalLoginForm.password_placeholder')}
-          />
-        </div>
-        <div>
           <Field name="myField"
             fullWidth
             component={NinesqEmailField}
             label={translate('LocalLoginForm.email_placeholder')}
+            placeholder={translate('LocalLoginForm.email_placeholder')}
           />
         </div>
-        <div>
+        <div className={classes.fieldOutline}>
           <Field name="mypassword"
             fullWidth
             component={NinesqPasswordField}
+            placeholder={translate('LocalLoginForm.password_placeholder')}
             label={translate('LocalLoginForm.password_placeholder')}
           />
         </div>
