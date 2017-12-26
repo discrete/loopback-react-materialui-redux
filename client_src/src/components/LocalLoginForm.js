@@ -16,6 +16,13 @@ import IconButton from 'material-ui/IconButton';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 import Visibility from 'material-ui-icons/Visibility';
 import VisibilityOff from 'material-ui-icons/VisibilityOff';
+import { withStyles } from 'material-ui/styles'
+import { FormControl, FormHelperText } from 'material-ui/Form';
+import MailOutline from 'material-ui-icons/MailOutline';
+
+import NinesqTextField from './NinesqTextField';
+import NinesqEmailField from './NinesqEmailField';
+import NinesqPasswordField from './NinesqPasswordField';
 
 const styles = theme => ({
   flash_on: {
@@ -24,8 +31,11 @@ const styles = theme => ({
   flash_off: {
     display: 'none',
   },
-  input: {
-    display: 'none',
+  fieldOutline: {
+    fontWeight: 300,
+    borderRadius: 2,
+    border: '1px solid red',
+    boxSizing: 'border-box',
   },
 });
 
@@ -56,7 +66,7 @@ const messages = {
       "ES-Password"
     ],
     "password_placeholder": [
-      "Password",
+      "패스워드",
       "Password",
       "JP-Password",
       "ZH-Password",
@@ -76,38 +86,59 @@ const messages = {
 
 export class LocalLoginForm extends Component {
   static propTypes = {
-    prop: PropTypes
+    classes: PropTypes.object.isRequired,
   }
   state = {
     showPassword: true
   }
 
-  componentDidMount = () => {
+  constructor(props) {
+    super(props);
+
     this.props.dispatch(addTranslation(messages));
   }
+
+  // componentWillMount = () => {
+  //   this.props.dispatch(addTranslation(messages));
+  // }
 
   render() {
     const { handleSubmit, pristine, reset, submitting, translate, auth, classes } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
-        <div><Field name="email" component={TextField} placeholder={translate('LocalLoginForm.email_placeholder')}/></div>
-        <div><Field name="password" component={TextField} placeholder={translate('LocalLoginForm.password_placeholder')} /></div>
-        <div>{`error: ${auth.error}`}</div>
+        <div className={classes.fieldOutline}>
+          <Field name="myField"
+            fullWidth
+            component={NinesqEmailField}
+            label={translate('LocalLoginForm.email_placeholder')}
+            placeholder={translate('LocalLoginForm.email_placeholder')}
+          />
+        </div>
+        <div className={classes.fieldOutline}>
+          <Field name="mypassword"
+            fullWidth
+            component={NinesqPasswordField}
+            placeholder={translate('LocalLoginForm.password_placeholder')}
+            label={translate('LocalLoginForm.password_placeholder')}
+          />
+        </div>
+        <div className={auth.error ? classes.flash_on: classes.flash_off}>{`error: ${auth.error}`}</div>
+
         <div><button type="submit">{translate('LocalLoginForm.submit_label')}</button></div>
       </form>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, props) => ({
   auth: state.auth.auth,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code
-})
+});
 
 const mapDispatchToProps = {
 
 }
 
-export default compose(reduxForm({form: 'localLogin'}), connect(mapStateToProps, mapDispatchToProps))(LocalLoginForm);
+export default compose(reduxForm({form: 'localLogin'}), connect(mapStateToProps, mapDispatchToProps), withStyles(styles))(LocalLoginForm);

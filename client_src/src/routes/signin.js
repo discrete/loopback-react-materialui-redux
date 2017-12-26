@@ -44,9 +44,15 @@ export class SignIn extends Component {
 
   }
 
-  componentDidMount = () => {
+  constructor(props) {
+    super(props);
+
     this.props.dispatch(addTranslation(messages));
   }
+
+  // componentWillMount = () => {
+  //   this.props.dispatch(addTranslation(messages));
+  // }
 
   handleFacebookClick = (event) => {
     const { history } = this.props;
